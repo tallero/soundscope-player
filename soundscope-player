@@ -1,0 +1,28 @@
+#!/usr/bin/python
+import os
+import multiprocessing
+
+def bincue ():
+  while not q.empty():
+    cur_dir = q.get()
+    os.chdir (cur_dir)
+    os.popen ("shntool cue *.flac > foo.cue")
+    os.popen ("shntool join *.flac")
+ 
+# Init Queue for found sudirectories
+q = multiprocessing.Queue()
+
+# Grab all subdirectories within the current directory 
+search_sub ="find ./* -type d"
+
+for subdir in os.popen (search_sub):
+  q.put (os.getcwd() + subdir[1:-1] + '/')
+
+cores=multiprocessing.cpu_count()
+
+for i in range (cores):
+  process = multiprocessing.Process(target=bincue, args=())
+  process.start()
+
+def main():
+    parser = Argu

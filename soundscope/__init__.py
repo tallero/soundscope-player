@@ -134,7 +134,7 @@ def main():
     parser = ArgumentParser(**parser_args)
 
     media_source = {'args': ['media_source'],
-                    'kwargs': {'nargs': '?',
+                    'kwargs': {'nargs': '*',
                                'action': 'store',
                                'help': ("media source; "
                                         "default: current directory")}}
@@ -146,14 +146,9 @@ def main():
 
     if not args.media_source:
         media_source = select_media()
-        play(*media_source)
     else:
         media_source = args.media_source
-        print(media_source)
-        if len(args.media_source) > 1:
-            play(*media_source)
-        elif len(args.media_source):
-            play([media_source])
+    play(*media_source)
 
 if __name__ == "__main__":
     main()

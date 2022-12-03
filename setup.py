@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Setup for SoundScope player"""
+from pathlib import Path
 from platform import system, machine
 from setuptools import setup, find_packages
 

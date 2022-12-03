@@ -84,14 +84,21 @@ def clean_cache():
     for f in files:
         print(f)
 
+def fiximg(cue):
+    with open(cue, "r") as handle:
+        text = handle.read()
+    with open(cue, "w") as handle:
+        handle.write(text.replace("WAVE", "BINARY"))
+
 def play(*media_src):
     ds_settings = path_join(dirname(realpath(__file__)), "settings.ini")
     set_dirs()
     mkimg(*media_src,
           out_dir=dirs['cache'],
           image_name="playback")
-    img = path_join(dirs['cache'], "playback.cue")
-    ds_cmd = ["duckstation-nogui", "-settings", ds_settings, img]
+    cue = path_join(dirs['cache'], "playback.cue")
+    fiximg(cue)
+    ds_cmd = ["duckstation-nogui", "-settings", ds_settings, cue]
     sh(ds_cmd)
     clean_cache()
 

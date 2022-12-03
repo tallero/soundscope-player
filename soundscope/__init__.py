@@ -30,9 +30,9 @@ from mkaudiocdrimg import mkimg
 from gi import require_version
 require_version("Gtk", '3.0')
 from gi.repository import Gtk
-# from gi.repository.Gtk import FileChooserNative
+import glob
 from os import getcwd, listdir, makedirs, umask
-from os.path import abspath, basename, exists, isdir
+from os.path import abspath, basename, exists, dirname, isdir, realpath
 from os.path import join as path_join
 from pathlib import Path
 from shutil import which
@@ -79,13 +79,21 @@ def set_dirs(tmp_dir=dirs['cache']):
             pass
     umask(original_umask)
 
+def clean_cache():
+    files = glob.glob(f"{dirs['cache']}/*")
+    for f in files:
+        print(f)
+
 def play(*media_src):
+    ds_settings = path_join(dirname(realpath(__file__)), "settings.ini")
     set_dirs()
     mkimg(*media_src,
           out_dir=dirs['cache'],
           image_name="playback")
-    ds_cmd = ["duckstation-nogui", "-settings"]
+    img = path_join(dirs['cache'], "playback.cue")
+    ds_cmd = ["duckstation-nogui", "-settings", ds_settings, img]
     sh(ds_cmd)
+    clean_cache()
 
 def on_activate(app):
     win = Gtk.ApplicationWindow(application=app)

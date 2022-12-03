@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from argparse import ArgumentParser
 import os
 import multiprocessing
 
@@ -9,20 +10,35 @@ def bincue ():
     os.popen ("shntool cue *.flac > foo.cue")
     os.popen ("shntool join *.flac")
  
-# Init Queue for found sudirectories
-q = multiprocessing.Queue()
+# # Init Queue for found sudirectories
+# q = multiprocessing.Queue()
+# 
+# # Grab all subdirectories within the current directory 
+# search_sub ="find ./* -type d"
+# 
+# for subdir in os.popen (search_sub):
+#   q.put (os.getcwd() + subdir[1:-1] + '/')
+# 
+# cores=multiprocessing.cpu_count()
+# 
+# for i in range (cores):
+#   process = multiprocessing.Process(target=bincue, args=())
+#   process.start()
 
-# Grab all subdirectories within the current directory 
-search_sub ="find ./* -type d"
-
-for subdir in os.popen (search_sub):
-  q.put (os.getcwd() + subdir[1:-1] + '/')
-
-cores=multiprocessing.cpu_count()
-
-for i in range (cores):
-  process = multiprocessing.Process(target=bincue, args=())
-  process.start()
+def parse_media_source():
+    pass
 
 def main():
-    parser = Argu
+    parser_args = {"description": "PlayStation SoundScope player"}
+    parser = ArgumentParser(**parser_args)
+    media_source = {'args': ['media_source'],
+                    'kwargs': {'nargs': '+',
+                               'action': 'store',
+                               'help': ("media source; "
+                                        "default: current directory")}}
+    parser.add_argument(*media_source['args'],
+                        **media_source['kwargs'])
+
+    args = parser.parse_args()
+
+    print(args.media_source)

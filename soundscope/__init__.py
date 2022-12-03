@@ -87,10 +87,14 @@ def play(*media_src):
     ds_cmd = ["duckstation-nogui", "-settings"]
     sh(ds_cmd)
 
-def select_media():
+def on_activate(app):
     media_prompt = Gtk.FileChooserNative()
-    media_prompt.show_all()
-    Gtk.main()
+    media_prompt.present()
+
+def select_media():
+    app = Gtk.Application()
+    app.connect("activate", on_activate)
+    app.run()
 
 def main():
     check_requirements()

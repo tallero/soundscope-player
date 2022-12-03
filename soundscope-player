@@ -1,44 +1,113 @@
 #!/usr/bin/python
 from argparse import ArgumentParser
 import os
-import multiprocessing
+import mimetypes
+from os import getcwd, mkdirs, walk
+from os.path import abspath, basename, exists, isdir
+from os.path import join as path_join
+from pathlib import Path
+import subprocess
+from subprocess import run as sh
+import tempfile
 
-def bincue ():
-  while not q.empty():
-    cur_dir = q.get()
-    os.chdir (cur_dir)
-    os.popen ("shntool cue *.flac > foo.cue")
-    os.popen ("shntool join *.flac")
- 
-# # Init Queue for found sudirectories
-# q = multiprocessing.Queue()
-# 
-# # Grab all subdirectories within the current directory 
-# search_sub ="find ./* -type d"
-# 
-# for subdir in os.popen (search_sub):
-#   q.put (os.getcwd() + subdir[1:-1] + '/')
-# 
-# cores=multiprocessing.cpu_count()
-# 
-# for i in range (cores):
-#   process = multiprocessing.Process(target=bincue, args=())
-#   process.start()
+def discover_media_source(*sources):
+    media = set()
+    mimetypes.init()
+    for src in sources:
+        src = abspath(src)
+        if not exists(src):
+            print(f"Resource at {src} not found, quitting...")
+            quit()
+        if isdir(src):
+            for _dir, _dirs, _files in walk(src):
+                for file in _files:
+                    filename = path_join(src, _dir, file) 
+                    if is_media(filename):
+                        media.add(filename)
+        else:
+            if is_media(src):
+                media.add(src)
+    return media
 
-def parse_media_source():
-    pass
+def is_media(filename):
+    mimestart = mimetypes.guess_type(filename)[0]
+    if mimestart != None:
+        mimestart = mimestart.split('/')[0]
+        if mimestart in ['audio', 'video']:
+            return True
+
+def preprocess_media(*media,
+                     tmp_dir=path_join(tempfile.gettempdir(), "soundscope")):
+    media = set()
+    mkdirs(tmp_dir, exist_ok=True)
+    chmod(tmp_dir, 700)
+    for m in media:
+        if not m.endswith('.flac'):
+            out = join_path(tmp_dir, Path(basename(m)).with_suffix('.flac'))
+            pp_cmd = ["ffmpeg", "-i", m, "-c:a", "flac", out]
+            sh(pp_cmd)
+            media.add(out)
+        else:
+            media.add(m)
+
+def process_media(*media,
+                  out_dir=getcwd(),
+                  image_name="img"):
+    cue_cmd = ["shntool", "cue"]
+    cue_cmd.extend(media)
+    image = path_join(out_dir, image_name)
+    handle = open(f"{image}.cue", "w")
+    print(cue_cmd)
+    sh(cue_cmd, stdout=handle)
+    bin_cmd = ["shntool", "join"]
+    bin_cmd.extend(media)
+    sh(bin_cmd)
+    return f"{image}.bin", f"{image}.cue"
 
 def main():
     parser_args = {"description": "PlayStation SoundScope player"}
     parser = ArgumentParser(**parser_args)
+
     media_source = {'args': ['media_source'],
                     'kwargs': {'nargs': '+',
                                'action': 'store',
                                'help': ("media source; "
                                         "default: current directory")}}
+
+    out_dir = {'args': ['--out-dir'],
+               'kwargs': {'dest': 'out_dir',
+                          'action': 'store',
+                          'default': getcwd(),
+                          'help': ("output directory; "
+                                   "default: current")}}
+
+    image_name = {'args': ['--image-name'],
+                  'kwargs': {'dest': 'image_name',
+                            'action': 'store',
+                            'default': 'img',
+                            'help': ("name of the resulting image; "
+                                     "default: img")}}
+
+    tmp_dir = {'args': ['--tmp-dir'],
+               'kwargs': {'dest': 'tmp_dir',
+                          'action': 'store',
+                          'default': path_join(tempfile.gettempdir(), "soundscope"),
+                          'help': ("output directory; "
+                                   "default: current")}}
+
     parser.add_argument(*media_source['args'],
                         **media_source['kwargs'])
+    parser.add_argument(*out_dir['args'],
+                        **out_dir['kwargs'])
+    parser.add_argument(*image_name['args'],
+                        **image_name['kwargs'])
 
     args = parser.parse_args()
 
-    print(args.media_source)
+    media = discover_media_source(*args.media_source)
+    img_bin, img_cue = process_media(*media,
+                                     out_dir=args.out_dir,
+                                     image_name=args.image_name)
+
+if __name__ == "__main__":
+    main()

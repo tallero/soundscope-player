@@ -28,7 +28,7 @@ from argparse import ArgumentParser
 import os
 from mkaudiocdrimg import mkimg
 from gi import require_version
-require_version("Gtk", '4.0')
+require_version("Gtk", '3.0')
 from gi.repository import Gtk
 # from gi.repository.Gtk import FileChooserNative
 from os import getcwd, listdir, makedirs, umask
@@ -88,13 +88,25 @@ def play(*media_src):
     sh(ds_cmd)
 
 def on_activate(app):
-    media_prompt = Gtk.FileChooserDialog()
-    media_prompt.show()
+    win = Gtk.ApplicationWindow(application=app)
+    media_prompt = Gtk.FileChooserDialog(title="Select media",
+                                         parent=win,
+                                         action=Gtk.FileChooserAction.OPEN)
+    media_prompt.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                             Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+    response = media_prompt.run()
+    if response  == Gtk.ResponseType.OK:
+        filename = media_prompt.get_filename()
+        print(f"File selected: {filename}")
+    elif response == Gtk.ResponseType.CANCEL:
+        print("Canceled")
+    media_prompt.destroy()
+    play(filename) 
 
 def select_media():
-    app = Gtk.Application()
+    app = Gtk.Application(application_id="com.sony.SoundScopePlayer")
     app.connect("activate", on_activate)
-    app.run()
+    app.run(None)
 
 def main():
     check_requirements()

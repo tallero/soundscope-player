@@ -8,6 +8,7 @@ from os import getcwd, listdir, makedirs, umask
 from os.path import abspath, basename, exists, isdir
 from os.path import join as path_join
 from pathlib import Path
+from shutil import which
 import subprocess
 from subprocess import run as sh
 

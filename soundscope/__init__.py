@@ -98,7 +98,7 @@ def main():
     parser = ArgumentParser(**parser_args)
 
     media_source = {'args': ['media_source'],
-                    'kwargs': {'nargs': '+',
+                    'kwargs': {'nargs': '?',
                                'action': 'store',
                                'help': ("media source; "
                                         "default: current directory")}}

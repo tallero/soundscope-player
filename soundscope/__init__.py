@@ -116,6 +116,7 @@ def on_activate(app):
         print(f"File(s) selected: {app.filenames}")
     elif response == Gtk.ResponseType.CANCEL:
         print("Canceled")
+    media_prompt.hide()
     media_prompt.destroy()
     app.quit()
 

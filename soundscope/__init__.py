@@ -106,19 +106,18 @@ def on_activate(app):
     win = Gtk.ApplicationWindow(application=app)
     media_prompt = Gtk.FileChooserDialog(title="Select media",
                                          parent=win,
-                                         action=Gtk.FileChooserAction.SELECT_FOLDER) #OPEN)
+                                         action=Gtk.FileChooserAction.OPEN)
     media_prompt.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                              Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
     media_prompt.set_select_multiple(True)
     response = media_prompt.run()
     if response  == Gtk.ResponseType.OK:
         app.filenames = media_prompt.get_filenames()
-        print(f"File selected: {app.filename}")
+        print(f"File(s) selected: {app.filenames}")
     elif response == Gtk.ResponseType.CANCEL:
         print("Canceled")
     media_prompt.destroy()
     app.quit()
-    # play(filename) 
 
 def select_media():
     app = Gtk.Application(application_id="com.sony.SoundScopePlayer")

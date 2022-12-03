@@ -25,6 +25,7 @@
 
 from appdirs import *
 from argparse import ArgumentParser
+from copy import deepcopy as cp
 import os
 from mkaudiocdrimg import mkimg
 from gi import require_version
@@ -102,14 +103,7 @@ def play(*media_src):
     sh(ds_cmd)
     clean_cache()
 
-def on_activate(app):
-    win = Gtk.ApplicationWindow(application=app)
-    media_prompt = Gtk.FileChooserDialog(title="Select media",
-                                         parent=win,
-                                         action=Gtk.FileChooserAction.OPEN)
-    media_prompt.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                             Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
-    media_prompt.set_select_multiple(True)
+def on_activate(app, media_prompt):
     response = media_prompt.run()
     if response  == Gtk.ResponseType.OK:
         app.filenames = media_prompt.get_filenames()
@@ -117,14 +111,22 @@ def on_activate(app):
     elif response == Gtk.ResponseType.CANCEL:
         print("Canceled")
     media_prompt.hide()
-    media_prompt.destroy()
-    app.quit()
+    return True
 
 def select_media():
     app = Gtk.Application(application_id="com.sony.SoundScopePlayer")
-    app.connect("activate", on_activate)
+    win = Gtk.ApplicationWindow(application=app)
+    dialog_kwargs = {"title": "Select media",
+                     "parent": win,
+                     "action": Gtk.FileChooserAction.OPEN}
+    dialog_buttons = (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                      Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+    media_prompt = Gtk.FileChooserDialog(**dialog_kwargs)
+    media_prompt.add_buttons(*dialog_buttons)
+    media_prompt.set_select_multiple(True)
+    app.connect("activate", on_activate, media_prompt)
     app.run(None)
-    play(*app.filenames) 
+    return app.filenames
 
 def main():
     check_requirements()
@@ -143,9 +145,10 @@ def main():
     args = parser.parse_args()
 
     if not args.media_source:
-        select_media()
+        media_source = select_media()
     else:
-        play(*args.media_source) 
+        media_source = args._media_source
+    play(*media_source)
 
 if __name__ == "__main__":
     main()

@@ -88,8 +88,8 @@ def play(*media_src):
     sh(ds_cmd)
 
 def on_activate(app):
-    media_prompt = Gtk.FileChooserNative()
-    media_prompt.present()
+    media_prompt = Gtk.FileChooserDialog()
+    media_prompt.show()
 
 def select_media():
     app = Gtk.Application()

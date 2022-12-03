@@ -50,7 +50,7 @@ def zenity_err(msg):
 
 def check_requirements():
     if which("zenity"):
-        print_err = zenity_error
+        print_err = zenity_err
     else:
         print_err = print
     programs = ['duckstation-nogui']

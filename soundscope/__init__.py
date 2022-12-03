@@ -147,7 +147,7 @@ def main():
     if not args.media_source:
         media_source = select_media()
     else:
-        media_source = args._media_source
+        media_source = args.media_source
     play(*media_source)
 
 if __name__ == "__main__":

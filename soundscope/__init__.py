@@ -27,6 +27,10 @@ from appdirs import *
 from argparse import ArgumentParser
 import os
 from mkaudiocdrimg import mkimg
+from gi import require_version
+require_version("Gtk", '4.0')
+from gi.repository import Gtk
+# from gi.repository.Gtk import FileChooserNative
 from os import getcwd, listdir, makedirs, umask
 from os.path import abspath, basename, exists, isdir
 from os.path import join as path_join
@@ -83,6 +87,11 @@ def play(*media_src):
     ds_cmd = ["duckstation-nogui", "-settings"]
     sh(ds_cmd)
 
+def select_media():
+    media_prompt = Gtk.FileChooserNative()
+    media_prompt.show_all()
+    Gtk.main()
+
 def main():
     check_requirements()
     parser_args = {"description": "PlayStation SoundScope player"}
@@ -99,7 +108,10 @@ def main():
 
     args = parser.parse_args()
 
-    play(*args.media_source) 
+    if not args.media_source:
+        select_media()
+    else:
+        play(*args.media_source) 
 
 if __name__ == "__main__":
     main()

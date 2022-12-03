@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   sodipodi:docname="com.Sony.SoundScopePlayer.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="1.9414062"
+     inkscape:cx="151.17907"
+     inkscape:cy="257.03018"
+     inkscape:window-width="1932"
+     inkscape:window-height="1631"
+     inkscape:window-x="3031"
+     inkscape:window-y="225"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2490">
+      <stop
+         style="stop-color:#b1b1ff;stop-opacity:0.52920306;"
+         offset="0"
+         id="stop2486" />
+      <stop
+         style="stop-color:#6363eb;stop-opacity:0;"
+         offset="0.99989998"
+         id="stop3952" />
+      <stop
+         style="stop-color:#1e1eaa;stop-opacity:0;"
+         offset="0.99994999"
+         id="stop4734" />
+      <stop
+         style="stop-color:#0f0f3b;stop-opacity:0;"
+         offset="1"
+         id="stop2488" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2490"
+       id="radialGradient2492"
+       cx="253.0376"
+       cy="213.91101"
+       fx="253.0376"
+       fy="213.91101"
+       r="159.94582"
+       gradientTransform="matrix(0.5109553,1.0335722,-1.0022222,0.49545717,329.21495,-116.02772)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000021;fill-opacity:1"
+       id="rect111"
+       width="422.44391"
+       height="411.07013"
+       x="44.861168"
+       y="51.492771"
+       ry="31.182909" />
+    <ellipse
+       style="fill:url(#radialGradient2492);fill-opacity:1"
+       id="path1625"
+       ry="167.34995"
+       rx="159.94582"
+       cy="256.9136"
+       cx="256.60727" />
+    <path
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd"
+       d="m 158.03986,212.59011 0.97875,83.53986 213.28081,-43.11921 z"
+       id="path4790"
+       sodipodi:nodetypes="cccc" />
+  </g>
+</svg>

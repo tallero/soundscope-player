@@ -111,17 +111,19 @@ def on_activate(app):
                              Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
     response = media_prompt.run()
     if response  == Gtk.ResponseType.OK:
-        filename = media_prompt.get_filename()
-        print(f"File selected: {filename}")
+        app.filename = media_prompt.get_filename()
+        print(f"File selected: {app.filename}")
     elif response == Gtk.ResponseType.CANCEL:
         print("Canceled")
     media_prompt.destroy()
-    play(filename) 
+    app.quit()
+    # play(filename) 
 
 def select_media():
     app = Gtk.Application(application_id="com.sony.SoundScopePlayer")
     app.connect("activate", on_activate)
     app.run(None)
+    play(app.filename) 
 
 def main():
     check_requirements()
